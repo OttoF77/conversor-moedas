@@ -1,0 +1,16 @@
+# Render deployment configuration
+# https://render.com/docs/yaml-spec
+
+services:
+  - type: web
+    name: conversor-moedas
+    runtime: java
+    plan: free
+    buildCommand: mvn clean package
+    startCommand: java -jar target/conversor-moedas-0.1.0.jar --server
+    envVars:
+      - key: SERVER_MODE
+        value: "true"
+      - key: EXCHANGE_RATE_API_KEY
+        sync: false  # This will need to be set manually in Render dashboard
+    healthCheckPath: /health

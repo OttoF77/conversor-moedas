@@ -1,0 +1,104 @@
+<!--
+  Conversor de Moedas – Frontend estático
+  Estrutura:
+  - Header (título/subtítulo)
+  - Formulário (valor, moedas, botão converter)
+  - Resultados (valor convertido, taxa, data)
+  - Indicadores (loading, cold start)
+  - Erros
+  - Footer
+-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversor de Moedas | Oracle ONE</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>💱 Conversor de Moedas</h1>
+            <p class="subtitle">Oracle ONE - Desafio Java</p>
+        </header>
+
+        <main class="converter-card">
+            <!-- Formulário principal -->
+            <form id="converterForm">
+                <div class="input-group">
+                    <label for="amount">Valor</label>
+                    <input 
+                        type="text" 
+                        id="amount" 
+                        placeholder="100.00" 
+                        required
+                        pattern="[0-9]*[.,]?[0-9]+"
+                        title="Digite um número válido"
+                    >
+                </div>
+
+                <!-- Seleção de moedas e troca -->
+                <div class="currency-group">
+                    <div class="input-group">
+                        <label for="fromCurrency">De</label>
+                        <select id="fromCurrency" required>
+                            <option value="">Selecione...</option>
+                        </select>
+                    </div>
+
+                    <div class="swap-button">
+                        <button type="button" id="swapBtn" aria-label="Trocar moedas">
+                            ⇄
+                        </button>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="toCurrency">Para</label>
+                        <select id="toCurrency" required>
+                            <option value="">Selecione...</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="convert-btn" id="convertBtn">
+                    Converter
+                </button>
+            </form>
+
+            <!-- Área de resultados -->
+            <div id="result" class="result hidden">
+                <div class="result-value">
+                    <span id="resultAmount"></span>
+                </div>
+                <div class="result-details">
+                    <p><strong>Taxa:</strong> <span id="resultRate"></span></p>
+                    <p><strong>Data:</strong> <span id="resultDate"></span></p>
+                </div>
+            </div>
+
+            <!-- Loading / cold start -->
+            <div id="loading" class="loading hidden">
+                <div class="spinner"></div>
+                <p>Convertendo...</p>
+                <p class="cold-start-warning hidden">
+                    Primeira conversão pode demorar ~30s (servidor acordando)
+                </p>
+            </div>
+
+            <!-- Mensagens de erro -->
+            <div id="error" class="error hidden">
+                <p>❌ <span id="errorMessage"></span></p>
+            </div>
+        </main>
+
+        <footer>
+            <p>Desenvolvido por <a href="https://github.com/OttoF77" target="_blank">Otto Freitag</a></p>
+            <p class="tech-stack">Java 17 • Javalin • ExchangeRate-API</p>
+        </footer>
+    </div>
+
+    <!-- Lógica da página -->
+    <script src="script.js"></script>
+</body>
+</html>
