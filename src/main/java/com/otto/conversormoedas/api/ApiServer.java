@@ -57,6 +57,7 @@ public class ApiServer {
     public void start() {
         app.get("/", this::handleRoot);
         app.get("/health", this::handleHealth);
+        app.get("/helth", this::handleHealth); // Workaround: typo no Dashboard Render
         app.get("/api/convert", this::handleConvert);
         app.get("/api/rates", this::handleRates);
         app.get("/api/currencies", this::handleCurrencies);
