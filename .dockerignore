@@ -1,0 +1,26 @@
+# Git
+.git
+.gitignore
+
+# Maven
+target/
+.mvn/
+
+# IDE
+.vscode/
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Documentação
+README.md
+*.md
+
+# Frontend (não necessário no backend)
+src/main/resources/public/
+
+# Requisitos
+Requisitos/
