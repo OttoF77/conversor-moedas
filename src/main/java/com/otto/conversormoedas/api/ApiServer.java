@@ -1,10 +1,14 @@
 package com.otto.conversormoedas.api;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.otto.conversormoedas.model.CurrencyCode;
 import com.otto.conversormoedas.service.CurrencyConverterService;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
+import io.javalin.json.JsonMapper;
 
+import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,9 +33,25 @@ public class ApiServer {
      * Cria e configura a instância do Javalin.
      * - CORS liberado (dev e GitHub Pages)
      * - Arquivos estáticos opcionais (frontend separado)
+     * - JSON mapper configurado com Gson
      */
     private Javalin createApp() {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        
         return Javalin.create(config -> {
+            // Configura Gson como JSON mapper
+            config.jsonMapper(new JsonMapper() {
+                @Override
+                public String toJsonString(Object obj, Type type) {
+                    return gson.toJson(obj, type);
+                }
+
+                @Override
+                public <T> T fromJsonString(String json, Type targetType) {
+                    return gson.fromJson(json, targetType);
+                }
+            });
+            
             // Habilita CORS (qualquer origem)
             config.bundledPlugins.enableCors(cors -> {
                 cors.addRule(rule -> {
