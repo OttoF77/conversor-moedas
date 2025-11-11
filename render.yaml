@@ -4,10 +4,9 @@
 services:
   - type: web
     name: conversor-moedas
-    runtime: java
+    runtime: docker
     plan: free
-    buildCommand: mvn clean package
-    startCommand: java -jar target/conversor-moedas-0.1.0.jar --server
+    dockerfilePath: ./Dockerfile
     envVars:
       - key: SERVER_MODE
         value: "true"
