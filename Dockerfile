@@ -16,7 +16,7 @@ FROM eclipse-temurin:17-jre-alpine
 
 WORKDIR /app
 
-# Copiar JAR do stage anterior
+# Copiar JAR do stage anterior (agora é o original, não o shaded)
 COPY --from=builder /app/target/conversor-moedas-0.1.0.jar app.jar
 
 # Porta padrão (Render usa PORT env var)
