@@ -18,8 +18,9 @@ Thumbs.db
 # Documentação
 README.md
 *.md
+DEPLOY.md
 
-# Frontend (não necessário no backend)
+# Frontend (deploy separado no GitHub Pages)
 src/main/resources/public/
 
 # Requisitos

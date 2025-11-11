@@ -28,7 +28,7 @@ public class ApiServer {
     /**
      * Cria e configura a instância do Javalin.
      * - CORS liberado (dev e GitHub Pages)
-     * - Arquivos estáticos em /public
+     * - Arquivos estáticos opcionais (frontend separado)
      */
     private Javalin createApp() {
         return Javalin.create(config -> {
@@ -39,8 +39,15 @@ public class ApiServer {
                 });
             });
             
-            // Arquivos estáticos (frontend)
-            config.staticFiles.add("/public");
+            // Arquivos estáticos apenas se existirem (opcional)
+            // Frontend está em repositório separado (GitHub Pages)
+            try {
+                if (getClass().getResourceAsStream("/public/index.html") != null) {
+                    config.staticFiles.add("/public");
+                }
+            } catch (Exception e) {
+                // Ignora se /public não existir - normal em deploy de backend
+            }
         });
     }
 
