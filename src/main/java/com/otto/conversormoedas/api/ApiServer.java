@@ -61,7 +61,7 @@ public class ApiServer {
         app.get("/api/rates", this::handleRates);
         app.get("/api/currencies", this::handleCurrencies);
         
-        app.start(port);
+            app.start("0.0.0.0", port);
         System.out.println("🚀 API Server rodando em http://localhost:" + port);
         System.out.println("📚 Endpoints disponíveis:");
         System.out.println("   GET /api/convert?from=USD&to=BRL&amount=100");
