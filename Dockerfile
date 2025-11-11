@@ -19,8 +19,10 @@ WORKDIR /app
 # Copiar JAR do stage anterior (agora é o original, não o shaded)
 COPY --from=builder /app/target/conversor-moedas-0.1.0.jar app.jar
 
-# Porta padrão (Render usa PORT env var)
-EXPOSE 7000
+# Porta exposta deve corresponder à porta em que a app escuta.
+# Em plataformas como Render, a env var PORT geralmente é 10000.
+# Nosso app lê PORT e usa 10000 lá; portanto, exponha 10000 aqui.
+EXPOSE 10000
 
 # Comando de inicialização
 CMD ["java", "-jar", "app.jar", "--server"]
