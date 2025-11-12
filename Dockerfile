@@ -17,7 +17,7 @@ FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 
 # Copiar JAR do stage anterior (agora é o original, não o shaded)
-COPY --from=builder /app/target/conversor-moedas-0.1.0.jar app.jar
+COPY --from=builder /app/target/conversor-moedas-0.2.0.jar app.jar
 
 # Porta exposta deve corresponder à porta em que a app escuta.
 # Em plataformas como Render, a env var PORT geralmente é 10000.

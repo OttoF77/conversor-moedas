@@ -2,12 +2,35 @@ package com.otto.conversormoedas.model;
 
 /** Enum de moedas suportadas. */
 public enum CurrencyCode {
+    // Moedas da América do Sul
     ARS("Peso argentino"),
     BOB("Boliviano boliviano"),
     BRL("Real brasileiro"),
     CLP("Peso chileno"),
     COP("Peso colombiano"),
-    USD("Dólar americano");
+    PEN("Sol peruano"),
+    UYU("Peso uruguaio"),
+    PYG("Guarani paraguaio"),
+    
+    // Moedas da América do Norte
+    USD("Dólar americano"),
+    CAD("Dólar canadense"),
+    MXN("Peso mexicano"),
+    
+    // Moedas Europeias
+    EUR("Euro"),
+    GBP("Libra esterlina"),
+    CHF("Franco suíço"),
+    
+    // Moedas Asiáticas
+    JPY("Iene japonês"),
+    CNY("Yuan chinês"),
+    INR("Rúpia indiana"),
+    KRW("Won sul-coreano"),
+    
+    // Moedas da Oceania
+    AUD("Dólar australiano"),
+    NZD("Dólar neozelandês");
 
     private final String description;
 

@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.otto</groupId>
     <artifactId>conversor-moedas</artifactId>
-    <version>0.1.0</version>
+    <version>0.2.0</version>
     <name>Conversor de Moedas</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

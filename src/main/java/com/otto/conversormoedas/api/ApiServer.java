@@ -3,6 +3,7 @@ package com.otto.conversormoedas.api;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.otto.conversormoedas.model.CurrencyCode;
+import com.otto.conversormoedas.service.ConversionHistoryService;
 import com.otto.conversormoedas.service.CurrencyConverterService;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
@@ -20,11 +21,13 @@ import java.util.stream.Collectors;
  */
 public class ApiServer {
     private final CurrencyConverterService service;
+    private final ConversionHistoryService historyService;
     private final Javalin app;
     private final int port;
 
     public ApiServer(CurrencyConverterService service, int port) {
         this.service = service;
+        this.historyService = new ConversionHistoryService();
         this.port = port;
         this.app = createApp();
     }
@@ -81,6 +84,7 @@ public class ApiServer {
         app.get("/api/convert", this::handleConvert);
         app.get("/api/rates", this::handleRates);
         app.get("/api/currencies", this::handleCurrencies);
+        app.get("/api/history", this::handleHistory);
         
             app.start("0.0.0.0", port);
         System.out.println("🚀 API Server rodando em http://localhost:" + port);
@@ -88,6 +92,7 @@ public class ApiServer {
         System.out.println("   GET /api/convert?from=USD&to=BRL&amount=100");
         System.out.println("   GET /api/rates?from=USD");
         System.out.println("   GET /api/currencies");
+        System.out.println("   GET /api/history");
         System.out.println("   GET /health");
     }
 
@@ -104,11 +109,12 @@ public class ApiServer {
     private void handleRoot(Context ctx) {
         Map<String, Object> response = new HashMap<>();
         response.put("name", "Conversor de Moedas API");
-        response.put("version", "0.1.0");
+        response.put("version", "0.2.0");
         response.put("endpoints", Arrays.asList(
             "/api/convert?from=USD&to=BRL&amount=100",
             "/api/rates?from=USD",
             "/api/currencies",
+            "/api/history?limit=10",
             "/health"
         ));
         ctx.json(response);
@@ -176,6 +182,15 @@ public class ApiServer {
 
             // Executa conversão
             var result = service.convertDetailed(from, to, amount);
+
+            // Registra no histórico
+            historyService.addConversion(
+                from.name(), 
+                to.name(), 
+                amount, 
+                result.getConvertedAmount(), 
+                result.getExchangeRate()
+            );
 
             // Monta resposta JSON
             Map<String, Object> response = new HashMap<>();
@@ -264,5 +279,54 @@ public class ApiServer {
         response.put("count", currencies.size());
 
         ctx.json(response);
+    }
+
+    /**
+     * Retorna histórico de conversões.
+     * GET /api/history?limit=10 (limite opcional, padrão 20)
+     */
+    private void handleHistory(Context ctx) {
+        try {
+            String limitParam = ctx.queryParam("limit");
+            int limit = 20; // padrão
+            
+            if (limitParam != null) {
+                try {
+                    limit = Integer.parseInt(limitParam);
+                    if (limit <= 0 || limit > 100) {
+                        limit = 20; // fallback se inválido
+                    }
+                } catch (NumberFormatException e) {
+                    // Usa padrão se inválido
+                }
+            }
+            
+            var history = historyService.getLastConversions(limit);
+            
+            // Converte para formato JSON amigável
+            var historyList = history.stream()
+                .map(record -> Map.of(
+                    "from", record.getFromCurrency(),
+                    "to", record.getToCurrency(),
+                    "amount", record.getAmount(),
+                    "result", record.getResult(),
+                    "rate", record.getExchangeRate(),
+                    "timestamp", record.getFormattedTimestamp()
+                ))
+                .collect(Collectors.toList());
+            
+            Map<String, Object> response = new HashMap<>();
+            response.put("history", historyList);
+            response.put("count", historyList.size());
+            response.put("total", historyService.getHistorySize());
+            
+            ctx.json(response);
+            
+        } catch (Exception e) {
+            ctx.status(500).json(Map.of(
+                "error", "Falha ao buscar histórico",
+                "message", e.getMessage()
+            ));
+        }
     }
 }
