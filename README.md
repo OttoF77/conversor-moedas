@@ -844,6 +844,6 @@ Projeto educacional desenvolvido para o programa **Oracle Next Education (ONE)**
 
 ---
 
-**Desenvolvido por:** [Otto Ferreira](https://github.com/OttoF77)  
+**Desenvolvido por:** [Otto Freitag](https://github.com/OttoF77)  
 **Desafio:** Oracle ONE - Conversor de Moedas  
 **Stack:** Java 17 • Javalin • HTML/CSS/JS • ExchangeRate-API
